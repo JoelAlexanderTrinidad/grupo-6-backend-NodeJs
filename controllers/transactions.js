@@ -1,13 +1,13 @@
-const { catchAsync } = require("../helpers/catchAsync");
-const createHttpError = require('http-errors');
-const { Transactions } = require('../database/models');
-const { endpointResponse } = require("../helpers/success");
+const { catchAsync } = require("../helpers/catchAsync")
+const createHttpError = require('http-errors')
+const { Transaction } = require('../database/models')
+const { endpointResponse } = require("../helpers/success")
 
 
 module.exports = {
     get: catchAsync(async(req, res, next) => {
         try {
-            const response = await Transactions.findAll()
+            const response = await Transaction.findAll()
             endpointResponse({
                 res,
                 message: 'Transactions retrieved successfully',
