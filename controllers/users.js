@@ -59,20 +59,21 @@ module.exports = {
 
   put: catchAsync(async (req, res, next) => {
     try {
-      const { firstName, lastName, email, password } = req.body;
-      const formatIsOk = firstName && lastName && email && password ? true : null;
+      const { firstName, lastName, email, password, avatar, roleId } = req.body;
       const userId = req.params.id;
       const searchedUser = await User.findOne({where: {id: userId}});
-      const passwordIsOk = searchedUser && formatIsOk ? isValidPassword(searchedUser.password, password) : null;
 
-      if (!formatIsOk) { return res.status(403).json({message: 'You must write the required fields'});}
       if (!searchedUser) { return res.status(404).json({message: `User with id ${userId} was not found`});}
-      if (!passwordIsOk) { return res.status(403).json({message: 'Incorrect password'});}
+
+      const hashedPassword = createHash(password);
 
       const newValuesUser = {
         firstName,
         lastName,
         email,
+        password: hashedPassword,
+        avatar,
+        roleId
       };
 
       const modifiedUser = await User.update(newValuesUser, {where: {id: userId}});
