@@ -32,7 +32,7 @@ module.exports = {
     const thereIsRole = req.body.roleId || null;
 
     try {
-      emailDoesExist && res.status(403).json('Email is already in use');
+      if (emailDoesExist) { return res.status(403).json('Email is already in use');}
 
       if (formatIsOk) {
         const hashedPassword = createHash(req.body.password);
@@ -45,8 +45,13 @@ module.exports = {
           roleId: thereIsRole
         }
 
-        await User.create(newUser);
-        return res.status(201).json(newUser);
+        const createdUser = await User.create(newUser);
+        endpointResponse({
+          res,
+          code: 201,
+          message: 'User created successfully',
+          body: createdUser,
+        })
       }
     } catch (error) {
       const httpError = createHttpError(
@@ -62,8 +67,10 @@ module.exports = {
       const { firstName, lastName, email, password, avatar, roleId } = req.body;
       const userId = req.params.id;
       const searchedUser = await User.findOne({where: {id: userId}});
+      const emailDoesExist = await User.findOne({where: {email: email}});
 
       if (!searchedUser) { return res.status(404).json({message: `User with id ${userId} was not found`});}
+      if (emailDoesExist) { return res.status(403).json('Email is already in use');}
 
       const hashedPassword = createHash(password);
 
@@ -78,7 +85,12 @@ module.exports = {
 
       const modifiedUser = await User.update(newValuesUser, {where: {id: userId}});
       if (modifiedUser) {
-        return res.status(201).json({modified: newValuesUser});
+        endpointResponse({
+          res,
+          code: 201,
+          message: 'User modified successfully',
+          body: newValuesUser,
+        })
       }
 
     } catch (error) {
@@ -100,7 +112,11 @@ module.exports = {
       const deletedUser = await User.destroy({where: {id: userId}});
 
       if (deletedUser) {
-        return res.status(201).json({message: 'User deleted'});
+        endpointResponse({
+          res,
+          code: 201,
+          message: 'User deleted successfully',
+        })
       }
 
     } catch (error) {
