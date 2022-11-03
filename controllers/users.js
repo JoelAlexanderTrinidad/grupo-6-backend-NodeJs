@@ -32,9 +32,7 @@ module.exports = {
     const thereIsRole = req.body.roleId || null;
 
     try {
-      if (emailDoesExist) {
-        return res.status(403).json('Email is already in use');
-      }
+      emailDoesExist && res.status(403).json('Email is already in use');
 
       if (formatIsOk) {
         const hashedPassword = createHash(req.body.password);
@@ -54,6 +52,60 @@ module.exports = {
       const httpError = createHttpError(
         error.statusCode,
         `[Error creating user] - [index - POST]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
+  put: catchAsync(async (req, res, next) => {
+    try {
+      const { firstName, lastName, email, password } = req.body;
+      const formatIsOk = firstName && lastName && email && password ? true : null;
+      const userId = req.params.id;
+      const searchedUser = await User.findOne({where: {id: userId}});
+      const passwordIsOk = searchedUser && formatIsOk ? isValidPassword(searchedUser.password, password) : null;
+
+      if (!formatIsOk) { return res.status(403).json({message: 'You must write the required fields'});}
+      if (!searchedUser) { return res.status(404).json({message: `User with id ${userId} was not found`});}
+      if (!passwordIsOk) { return res.status(403).json({message: 'Incorrect password'});}
+
+      const newValuesUser = {
+        firstName,
+        lastName,
+        email,
+      };
+
+      const modifiedUser = await User.update(newValuesUser, {where: {id: userId}});
+      if (modifiedUser) {
+        return res.status(201).json({modified: newValuesUser});
+      }
+
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error modifying user] - [index - PUT]: ${error.message}`,
+      )
+      next(httpError)
+    }   
+  }),
+
+  deleteUser: catchAsync(async (req, res, next) => {
+    try {
+      const userId = req.params.id;
+      const searchedUser = await User.findOne({where: {id: userId}});
+
+      if (!searchedUser) { return res.status(404).json({message: `User with id ${userId} was not found`});}
+
+      const deletedUser = await User.destroy({where: {id: userId}});
+
+      if (deletedUser) {
+        return res.status(201).json({message: 'User deleted'});
+      }
+
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error deleting user] - [index - DELETE]: ${error.message}`,
       )
       next(httpError)
     }
