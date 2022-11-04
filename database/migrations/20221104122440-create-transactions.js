@@ -21,13 +21,13 @@ module.exports = {
       },
       userId: {
         type: Sequelize.INTEGER,
-        field: "user_id",
+        allowNull: false,
         onDelete: "CASCADE",
-        onUpdate: "CASCADE"
+        onUpdate: "CASCADE",
       },
       categoryId: {
         type: Sequelize.INTEGER,
-        field: "category_id",
+        allowNull: false,
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
       },
