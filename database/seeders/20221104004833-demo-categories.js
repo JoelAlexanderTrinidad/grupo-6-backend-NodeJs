@@ -3,19 +3,16 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     
-    // Add seed commands here.
-    
-     //Example:
-     await queryInterface.bulkInsert('Roles', [{
-       name: 'Administrator',
-       description: 'all priviliges granted',
+      await queryInterface.bulkInsert('Categories', [{
+       name: 'International Transfer',
+       description: 'transference to international bank account',
        createdAt:"2022-05-06",
        updatedAt:"2022-05-06"
        
      },
      {
-      name: 'Client',
-      description: 'personal wallet access',
+      name: 'Local Transfer',
+      description: 'transference to national bank account',
       createdAt:"2022-05-06",
       updatedAt:"2022-05-06"
      
@@ -28,7 +25,7 @@ module.exports = {
     
      //Add commands to revert seed here.
      //Example:
-     await queryInterface.bulkDelete('Roles', {[Op.or]: [{name: 'Administrator'}, {name: 'Client'}]});
+     await queryInterface.bulkDelete('Categories', {[Op.or]: [{name: 'International Transfer'}, {name: 'Local Transfer'}]});
      
   }
 };
