@@ -1,11 +1,11 @@
 const express = require('express')
 const {
-   getCategories,
+    getCategoriesById,getCategories
 } = require('../controllers/categories')
 
 const router = express.Router()
 
 router.get('/', getCategories)
-
+router.get('/:id', getCategoriesById)
 
 module.exports = router

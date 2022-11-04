@@ -21,4 +21,26 @@ module.exports = {
       next(httpError)
     }
   }),
+  
+  getCategoriesById: catchAsync(async (req, res, next) => {
+    try {
+      const filter =  req.params['id']
+      const response = await  Category.findAll({
+        where:[{id: filter}],
+        
+      })
+      endpointResponse({
+        res,
+        message: 'Categories retrieved successfully',
+        body: response,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving Categories] - [index - GET]: ${error.message}`,
+      )
+      next(httpError)
+    }
+  }),
+
 }
