@@ -2,7 +2,7 @@ const createHttpError = require('http-errors')
 const { User } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
-const { createHash, isValidPassword } = require('../helpers/bcrypt.js')
+const { createHash } = require('../helpers/bcrypt.js')
 
 // example of a controller. First call the service, then build the controller method
 module.exports = {
@@ -75,12 +75,12 @@ module.exports = {
       const hashedPassword = createHash(password);
 
       const newValuesUser = {
-        firstName,
-        lastName,
-        email,
-        password: hashedPassword,
-        avatar,
-        roleId
+        firstName: firstName || null,
+        lastName: lastName ||  null,
+        email: email || null,
+        password: hashedPassword || null,
+        avatar: avatar || null,
+        roleId: roleId || null
       };
 
       const modifiedUser = await User.update(newValuesUser, {where: {id: userId}});
