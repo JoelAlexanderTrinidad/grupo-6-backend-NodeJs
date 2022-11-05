@@ -3,8 +3,8 @@ const { User } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 const { createHash } = require('../helpers/bcrypt.js')
+const { ErrorObject } = require('../helpers/error')
 
-// example of a controller. First call the service, then build the controller method
 module.exports = {
   get: catchAsync(async (req, res, next) => {
     try {
@@ -17,12 +17,11 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving users] - [index - GET]: ${error.message}`,
+        `[Error retrieving users] - [users - GET]: ${error.message}`,
       )
       next(httpError)
     }
   }),
-
 
   post: catchAsync(async (req, res, next) => {
 
@@ -32,7 +31,7 @@ module.exports = {
     const thereIsRole = req.body.roleId || null;
 
     try {
-      if (emailDoesExist) { return res.status(403).json('Email is already in use');}
+      if (emailDoesExist) { throw new ErrorObject('Email is already in use', 403) }
 
       if (formatIsOk) {
         const hashedPassword = createHash(req.body.password);
@@ -56,7 +55,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error creating user] - [index - POST]: ${error.message}`,
+        `[Error creating user] - [users - POST]: ${error.message}`,
       )
       next(httpError)
     }
@@ -69,8 +68,8 @@ module.exports = {
       const searchedUser = await User.findOne({where: {id: userId}});
       const emailDoesExist = await User.findOne({where: {email: email}});
 
-      if (!searchedUser) { return res.status(404).json({message: `User with id ${userId} was not found`});}
-      if (emailDoesExist) { return res.status(403).json('Email is already in use');}
+      if (!searchedUser) { throw new ErrorObject(`User with id ${userId} was not found`, 404) }
+      if (emailDoesExist) { throw new ErrorObject('Email is already in use', 403) }
 
       const hashedPassword = createHash(password);
 
@@ -96,7 +95,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error modifying user] - [index - PUT]: ${error.message}`,
+        `[Error modifying user] - [users - PUT]: ${error.message}`,
       )
       next(httpError)
     }   
@@ -107,7 +106,7 @@ module.exports = {
       const userId = req.params.id;
       const searchedUser = await User.findOne({where: {id: userId}});
 
-      if (!searchedUser) { return res.status(404).json({message: `User with id ${userId} was not found`});}
+      if (!searchedUser) { throw new ErrorObject(`User with id ${userId} was not found`, 404) }
 
       const deletedUser = await User.destroy({where: {id: userId}});
 
@@ -122,7 +121,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error deleting user] - [index - DELETE]: ${error.message}`,
+        `[Error deleting user] - [users - DELETE]: ${error.message}`,
       )
       next(httpError)
     }

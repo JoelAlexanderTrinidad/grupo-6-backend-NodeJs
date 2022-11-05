@@ -3,15 +3,17 @@ const { User } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 const { isValidPassword } = require('../helpers/bcrypt.js')
+const { ErrorObject } = require('../helpers/error')
 
 module.exports = {
     login: catchAsync(async (req, res, next) => {
         try {
             const { email, password } = req.body;
             const emailAndPassExists = email && password ? true : null
-            if (!emailAndPassExists) { return res.status(403).json({error: 'Missing email or password fields'}) }
+            if (!emailAndPassExists) { throw new ErrorObject('Missing email or password fields', 400) }
+
             const userExists = await User.findOne({raw: true, where: {email}});
-            if (!userExists) { return res.status(404).json({message: 'User does not exist'}) }
+            if (!userExists) { throw new ErrorObject('User does not exist', 404) }
 
             const hashedPassword = userExists.password;
             const passwordMatches = userExists && isValidPassword(hashedPassword, password) ? true : null;
@@ -24,13 +26,13 @@ module.exports = {
                     body: userExists,
                   })
             } else {
-                return res.status(403).json({ok: false})
+                throw new ErrorObject('{ok: false}', 403) 
             }
 
         } catch (error) {
             const httpError = createHttpError(
                 error.statusCode,
-                `[Login error] - [index - POST]: ${error.message}`,
+                `[Login error] - [users - POST]: ${error.message}`,
               )
               next(httpError)
         }
