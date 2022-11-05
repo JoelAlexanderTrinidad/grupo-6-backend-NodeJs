@@ -51,6 +51,8 @@ module.exports = {
           message: 'User created successfully',
           body: createdUser,
         })
+      } else {
+        throw new ErrorObject('Missing fields', 400)
       }
     } catch (error) {
       const httpError = createHttpError(
