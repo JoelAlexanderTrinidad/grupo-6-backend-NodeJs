@@ -29,7 +29,7 @@ module.exports = {
         where:[{id: filter}],
       })
       if (categoryResult.length === 0){
-        throw new ErrorObject('Category ID not exist', 204)
+        throw new ErrorObject('Category ID not exists', 404)
       }
       const response = categoryResult
 
