@@ -8,12 +8,12 @@ const { ErrorObject } = require('../helpers/error')
 module.exports = {
   get: catchAsync(async (req, res, next) => {
     try {
-      const response = await User.findAll()
+      const response = await User.findAll();
       endpointResponse({
         res,
-        message: 'Users retrieved successfully',
+        message: "Users retrieved successfully",
         body: response,
-      })
+      });
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
@@ -129,3 +129,4 @@ module.exports = {
     }
   })
 }
+
