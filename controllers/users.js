@@ -49,7 +49,6 @@ module.exports = {
       next(httpError);
     }
   }),
-};
 
   post: catchAsync(async (req, res, next) => {
 
