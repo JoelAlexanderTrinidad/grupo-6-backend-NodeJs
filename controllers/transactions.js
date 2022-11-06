@@ -103,19 +103,33 @@ module.exports = {
       next(httpError);
     }
   }),
-  deleteTransaction:catchAsync(async (req, res, next)=>{
-try {
-    const transaction = await Transaction.findOne({where:{id},include:"transaction"});
-    if (req.user.id===transaction.userId){
-      await transaction.destroy();
+  deleteTransaction: catchAsync(async (req, res, next) => {
+   
+    try {
+    const transactionId = req.params.id;
+    const searchedTransaction = await Transaction.findOne({
+      where: { id: transactionId },
+    });
+
+    if (!searchedTransaction) {
+      throw new ErrorObject(`Transaction with id ${transactionId} was not found`, 404);
     }
 
-} catch (error) {
-    const httpError = createHttpError(
-      error.statusCode,
-      `[Error retrieving transactions]- [index- DELETE]:${error.message}`
-    );
-    next(httpError);
-}
-  })
+    const deletedTransaction = await Transaction.destroy({ where: { id: transactionId } });
+
+    if (deletedTransaction) {
+      endpointResponse({
+        res,
+        code: 201,
+        message: "Transactiondeleted successfully",
+      });
+    }
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving transactions]- [index- DELETE]:${error.message}`
+      );
+      next(httpError);
+    }
+  }),
 };

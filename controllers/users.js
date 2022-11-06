@@ -49,8 +49,6 @@ module.exports = {
       next(httpError);
     }
   }),
-};
-
   post: catchAsync(async (req, res, next) => {
 
     const formatIsOk = req.body.firstName && req.body.lastName && req.body.email && req.body.password ? true : null;
@@ -90,7 +88,6 @@ module.exports = {
       next(httpError)
     }
   }),
-
   put: catchAsync(async (req, res, next) => {
     try {
       const { firstName, lastName, email, password, avatar, roleId } = req.body;
@@ -157,3 +154,6 @@ module.exports = {
     }
   })
 }
+
+
+
