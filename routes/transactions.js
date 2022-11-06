@@ -1,4 +1,5 @@
 const express = require('express')
+
 const {
   get,
   getTransaction,
@@ -9,7 +10,6 @@ const {
 
 const router = express.Router()
 
-/* /transitions */
 router
     .get('/?', get)
     .get('/:id', getTransaction)
