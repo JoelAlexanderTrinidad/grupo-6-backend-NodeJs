@@ -1,6 +1,5 @@
 const { unlink: unlinkFile } = require('fs');
-const { validationResult } = require('express-validator');
-const { checkSchema } = require('express-validator/check');
+const { validationResult, checkSchema } = require('express-validator');
 const { ErrorObject } = require('../helpers/error');
 const { catchAsync } = require('../helpers/catchAsync');
 
