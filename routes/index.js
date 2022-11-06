@@ -1,5 +1,6 @@
 const express = require('express')
 const usersRouter = require('./users')
+
 const transactionsRouter = require('./transactions')
 const routerCategories = require("./categories");
 const authRouter = require('./auth')
@@ -13,5 +14,3 @@ router.use('/auth', authRouter)
 
 
 module.exports = router
-
-
