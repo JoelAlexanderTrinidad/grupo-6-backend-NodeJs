@@ -1,5 +1,22 @@
+const { unlink: unlinkFile } = require('fs');
+const { validationResult } = require('express-validator');
 const { checkSchema } = require('express-validator/check');
+const { ErrorObject } = require('../helpers/error');
+const { catchAsync } = require('../helpers/catchAsync');
 
-const validator = schema => checkSchema(schema);
 
-module.exports = validator;
+module.exports = schema => catchAsync(async (req, res, next) => {
+
+    const schemaValidation = checkSchema(schema);
+    await Promise.all(schemaValidation.map(validation => validation.run(req)));
+    const errors = validationResult(req);
+
+    if (errors.isEmpty()) return next();
+
+    if (req.file) await unlinkFile(req.file.path);
+
+    return res
+        .status(400)
+        .json(new ErrorObject("Bad Request", 400, errors.array()))
+
+});
