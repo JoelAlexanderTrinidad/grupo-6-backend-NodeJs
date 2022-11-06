@@ -12,5 +12,4 @@ router.use('/transactions', transactionsRouter)
 router.use('/categories', categoriesRouter)
 router.use('/auth', authRouter)
 
-
 module.exports = router
