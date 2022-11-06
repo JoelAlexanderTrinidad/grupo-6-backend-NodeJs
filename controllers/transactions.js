@@ -103,5 +103,19 @@ module.exports = {
       next(httpError);
     }
   }),
-  
+  deleteTransaction:catchAsync(async (req, res, next)=>{
+try {
+    const transaction = await Transaction.findOne({where:{id},include:"transaction"});
+    if (req.user.id===transaction.userId){
+      await transaction.destroy();
+    }
+
+} catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving transactions]- [index- DELETE]:${error.message}`
+    );
+    next(httpError);
+}
+  })
 };
