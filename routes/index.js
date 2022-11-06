@@ -1,15 +1,15 @@
 const express = require('express')
-const usersRouter = require('./users')
 
+const usersRouter = require('./users')
+const categoriesRouter = require('./categories')
 const transactionsRouter = require('./transactions')
-const routerCategories = require("./categories");
 const authRouter = require('./auth')
 
 const router = express.Router();
 
 router.use('/users', usersRouter)
 router.use('/transactions', transactionsRouter)
-router.use("/categories", routerCategories);
+router.use('/categories', categoriesRouter)
 router.use('/auth', authRouter)
 
 
