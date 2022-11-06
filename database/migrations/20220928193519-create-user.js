@@ -17,6 +17,9 @@ module.exports = {
       lastName: {
         type: Sequelize.STRING,
       },
+      password: {
+        type: Sequelize.STRING
+      },
       email: {
         type: Sequelize.STRING,
       },
@@ -32,11 +35,12 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       deletedAt: {
-        type: Sequelize.STRING,
-      },
+        type: Sequelize.DATE
+      }
+
     });
   },
   down: async (queryInterface, Sequelize) => {
