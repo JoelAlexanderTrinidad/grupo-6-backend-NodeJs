@@ -49,11 +49,9 @@ module.exports = {
       next(httpError);
     }
   }),
-};
 
   post: catchAsync(async (req, res, next) => {
 
-    const formatIsOk = req.body.firstName && req.body.lastName && req.body.email && req.body.password ? true : null;
     const emailDoesExist = await User.findOne({where: {email: req.body.email}});
     const thereIsAvatar = req.body.avatar || null;
     const thereIsRole = req.body.roleId || null;
@@ -61,7 +59,6 @@ module.exports = {
     try {
       if (emailDoesExist) { throw new ErrorObject('Email is already in use', 403) }
 
-      if (formatIsOk) {
         const hashedPassword = createHash(req.body.password);
         const newUser = {
           firstName: req.body.firstName, 
@@ -79,9 +76,6 @@ module.exports = {
           message: 'User created successfully',
           body: createdUser,
         })
-      } else {
-        throw new ErrorObject('Missing fields', 400)
-      }
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
