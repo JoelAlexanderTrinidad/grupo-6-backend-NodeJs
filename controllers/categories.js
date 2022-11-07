@@ -25,10 +25,11 @@ module.exports = {
   getCategoriesById: catchAsync(async (req, res, next) => {
     try {
       const filter =  req.params['id']
-      const categoryResult = await  Category.findAll({
+      const categoryResult = await  Category.findOne({
         where:[{id: filter}],
       })
-      if (categoryResult.length === 0){
+      console.log(categoryResult)
+      if (categoryResult === null){
         throw new ErrorObject('Category ID not exists', 404)
       }
       const response = categoryResult
