@@ -1,8 +1,14 @@
-const express = require('express')
-const { get } = require('../controllers/transactions')
+const express = require('express');
 
-const router = express.Router()
+const {
+  get,
+  getTransaction,
 
-router.get('/', get)
+  post,
+} = require('../controllers/transactions');
 
-module.exports = router
+const router = express.Router();
+
+router.get('/?', get).get('/:id', getTransaction).post('/', post);
+
+module.exports = router;
