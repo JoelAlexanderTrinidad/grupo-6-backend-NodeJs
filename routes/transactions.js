@@ -14,6 +14,4 @@ router
     .post("/", post)
     .delete("/:id",deleteTransaction)
 
-const { get } = require('../controllers/transactions')
-
 module.exports = router
