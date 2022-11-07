@@ -49,6 +49,7 @@ module.exports = {
       next(httpError);
     }
   }),
+
   post: catchAsync(async (req, res, next) => {
 
     const formatIsOk = req.body.firstName && req.body.lastName && req.body.email && req.body.password ? true : null;
@@ -154,6 +155,7 @@ module.exports = {
     }
   })
 }
+
 
 
 
