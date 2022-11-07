@@ -7,7 +7,7 @@ const { catchAsync } = require('../helpers/catchAsync')
 module.exports = {
   getCategories: catchAsync(async (req, res, next) => {
     try {
-      const response = await Category.findAll()
+      const response = await Category.findAll() 
       endpointResponse({
         res,
         message: 'Categories retrieved successfully',
