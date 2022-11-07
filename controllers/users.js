@@ -84,7 +84,6 @@ module.exports = {
       next(httpError)
     }
   }),
-
   put: catchAsync(async (req, res, next) => {
     try {
       const { firstName, lastName, email, password, avatar, roleId } = req.body;
@@ -151,3 +150,7 @@ module.exports = {
     }
   })
 }
+
+
+
+

@@ -1,3 +1,4 @@
+
 const { catchAsync } = require("../helpers/catchAsync");
 const createHttpError = require("http-errors");
 const { Transaction } = require("../database/models");
@@ -103,5 +104,34 @@ module.exports = {
       next(httpError);
     }
   }),
-  
+  deleteTransaction: catchAsync(async (req, res, next) => {
+   
+    try {
+    const transactionId = req.params.id;
+    const searchedTransaction = await Transaction.findOne({
+      where: { id: transactionId },
+    });
+
+    if (!searchedTransaction) {
+      throw new ErrorObject(`Transaction with id ${transactionId} was not found`, 404);
+    }
+
+    const deletedTransaction = await Transaction.destroy({ where: { id: transactionId } });
+
+    if (deletedTransaction) {
+      endpointResponse({
+        res,
+        code: 201,
+        message: "Transactiondeleted successfully",
+      });
+    }
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving transactions]- [index- DELETE]:${error.message}`
+      );
+      next(httpError);
+    }
+  }),
 };
+
