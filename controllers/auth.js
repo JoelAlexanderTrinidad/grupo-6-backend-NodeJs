@@ -9,8 +9,6 @@ module.exports = {
     login: catchAsync(async (req, res, next) => {
         try {
             const { email, password } = req.body;
-            const emailAndPassExists = email && password ? true : null
-            if (!emailAndPassExists) { throw new ErrorObject('Missing email or password fields', 400) }
 
             const userExists = await User.findOne({raw: true, where: {email}});
             if (!userExists) { throw new ErrorObject('User does not exist', 404) }
