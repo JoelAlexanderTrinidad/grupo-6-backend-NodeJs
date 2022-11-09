@@ -1,10 +1,18 @@
 const createHttpError = require('http-errors');
+const { ref, uploadBytes, getDownloadURL } = require('firebase/storage');
+
+//models
 const { User } = require('../database/models');
+
+//helpers
 const { endpointResponse } = require('../helpers/success');
 const { catchAsync } = require('../helpers/catchAsync');
 const { createHash } = require('../helpers/bcrypt.js');
 const { ErrorObject } = require('../helpers/error');
+const { storage } = require('../helpers/firebase');
+const { async } = require('@firebase/util');
 
+//CRUD´s
 module.exports = {
   //GET all users
   users: catchAsync(async (req, res, next) => {
@@ -28,7 +36,14 @@ module.exports = {
   userById: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params;
+
       const user = await User.findOne({ where: { id } });
+      //Get URL image from firebase
+      const imgRef = ref(storage, user.avatar);
+      const url = await getDownloadURL(imgRef);
+      //Update user's image property
+      user.avatar = url;
+
       if (!user) {
         return res.status(404).json({
           status: 'error',
@@ -50,20 +65,24 @@ module.exports = {
   }),
 
   post: catchAsync(async (req, res, next) => {
-    const formatIsOk =
-      req.body.firstName &&
-      req.body.lastName &&
-      req.body.email &&
-      req.body.password
-        ? true
-        : null;
-    const emailDoesExist = await User.findOne({
-      where: { email: req.body.email },
-    });
-    const thereIsAvatar = req.body.avatar || null;
-    const thereIsRole = req.body.roleId || null;
-
     try {
+      const formatIsOk =
+        req.body.firstName &&
+        req.body.lastName &&
+        req.body.email &&
+        req.body.password
+          ? true
+          : null;
+      const emailDoesExist = await User.findOne({
+        where: { email: req.body.email },
+      });
+      const thereIsAvatar = req.body.avatar || null;
+      const thereIsRole = req.body.roleId || null;
+
+      //Create user with Firebase service image
+      const imageRef = ref(storage, `users/${req.file.originalname}`);
+      const imageUploaded = await uploadBytes(imageRef, req.file.buffer);
+
       if (emailDoesExist) {
         throw new ErrorObject('Email is already in use', 403);
       }
@@ -77,6 +96,7 @@ module.exports = {
           password: hashedPassword,
           avatar: thereIsAvatar,
           roleId: thereIsRole,
+          avatar: imageUploaded.metadata.fullPath,
         };
 
         const createdUser = await User.create(newUser);
