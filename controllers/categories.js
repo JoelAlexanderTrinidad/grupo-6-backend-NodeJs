@@ -1,4 +1,3 @@
-
 const createHttpError = require('http-errors')
 const { Category } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
@@ -49,6 +48,32 @@ module.exports = {
       );
       next(httpError);
     }
+  }),
+  getCategoriesById: catchAsync(async (req, res, next) => {
+    try {
+      const filter =  req.params['id']
+      const categoryResult = await  Category.findOne({
+        where:[{id: filter}],
+      })
+      console.log(categoryResult)
+      if (categoryResult === null){
+        throw new ErrorObject('Category ID not exists', 404)
+      }
+      const response = categoryResult
+
+      endpointResponse({
+        res,
+        message: 'Categories retrieved successfully',
+        body: response,
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving Categories] - [index - GET]: ${error.message}`,
+      )
+      next(httpError)
+    }
+
   }),
 }
 
