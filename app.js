@@ -58,7 +58,7 @@ const options = {
   apis: [
     "./routes/categories.js",
     "./routes/transactions.js",
-    "./routes/user.js",
+    "./routes/users.js",
   ],
 };
 
