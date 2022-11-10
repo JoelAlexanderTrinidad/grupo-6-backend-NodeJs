@@ -52,18 +52,33 @@ const router = express.Router()
  /
 * @swagger
 * /transactions/{id}:
-*  delete:
-*    summary: returns the list of all  transactions 
+*  get:
+*    summary: Find transaction by ID
 *    tags: [transactions]
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of transaction to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64
 *    responses:
-*      200:
-*         description: the list of all transactions
-*         content:
+*        '200':
+*          description: successfuly operation
+*          content:
 *            application/json:
 *              schema:
-*                type: array
-*                items:
-*                  $ref: '#/components/schemas/transactions'
+*                $ref: '#/components/schemas/transactions'
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/transactions'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: transaction not found
+*        '500':
+*          description: error of server
 *    security:
 *     - ApiKeyAuth: []
 */
@@ -71,18 +86,33 @@ const router = express.Router()
  /
 * @swagger
 * /transactions/{id}:
-*  get:
-*    summary: returns the list of all  transactions 
+*  delete:
+*    summary: Find transaction by ID
 *    tags: [transactions]
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of transaction to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64
 *    responses:
-*      200:
-*         description: the list of all transactions
-*         content:
+*        '200':
+*          description: successfuly operation
+*          content:
 *            application/json:
 *              schema:
-*                type: array
-*                items:
-*                  $ref: '#/components/schemas/transactions'
+*                $ref: '#/components/schemas/transactions'
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/transactions'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: transaction not found
+*        '500':
+*          description: error of server
 *    security:
 *     - ApiKeyAuth: []
 */
