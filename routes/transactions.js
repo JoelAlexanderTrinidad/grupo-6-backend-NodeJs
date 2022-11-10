@@ -1,9 +1,15 @@
-const { postTransactions, putTransactions } = require('../controllers/transactions')
-
 const router = require('express').Router()
+const {
+  get,
+  getTransaction,
+  post,
+  deleteTransaction,
+} = require("../controllers/transactions");
 
+router
+    .get('/?', get)
+    .get('/:id', getTransaction)
+    .post("/", post)
+    .delete("/:id",deleteTransaction)
 
-router.post('/', postTransactions)
-router.put('/:id', putTransactions)
-
-module.exports =  router
+module.exports = router

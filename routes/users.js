@@ -1,14 +1,18 @@
-const express = require('express')
-const {
-   get, post, put, deleteUser
-} = require('../controllers/users')
+const express = require("express");
+const { postValidationSchema } = require('../schemas/usersValidation')
+const validator = require('../middlewares/validator')
 
-const router = express.Router()
+//controllers
+const { users, userById, post, put, deleteUser } = require("../controllers/users");
 
-router.get('/', get)
+const router = express.Router();
 
-router.post('/', post)
+router.get("/", users);
+router.get("/:id", userById);
+router.post('/', validator(postValidationSchema), post)
 router.put('/:id', put)
 router.delete('/:id', deleteUser)
 
 module.exports = router
+
+
