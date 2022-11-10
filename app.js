@@ -34,21 +34,32 @@ const options = {
     info: {
       title: "Ultra Wallet Documentation",
       version: "0.1.0",
-      description:
-        "Ultra Wallet tu wallet rapida segura y economica",
+      description: "Ultra Wallet tu wallet rapida segura y economica",
       license: {
         name: "alkemy G6",
         url: "https://trello.com/b/u2xLPJqn/grupo6-backend-nodejs-alkemy",
       },
-      
     },
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "http://localhost:3000/",
       },
     ],
+    components: {
+      securitySchemes: {
+        ApiKeyAuth: {
+          type: "apiKey",  // avisar de el token en el name
+          in: "header",
+          name: "x-access-token",
+        },
+      },
+    },
   },
-  apis: ["./controllers/categories.js"],
+  apis: [
+    "./routes/categories.js",
+    "./routes/transactions.js",
+    "./routes/user.js",
+  ],
 };
 
 const specs = swaggerJsdoc(options);
