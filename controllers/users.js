@@ -10,7 +10,6 @@ const { catchAsync } = require('../helpers/catchAsync');
 const { createHash } = require('../helpers/bcrypt.js');
 const { ErrorObject } = require('../helpers/error');
 const { storage } = require('../helpers/firebase');
-const { async } = require('@firebase/util');
 
 //CRUD´s
 module.exports = {
