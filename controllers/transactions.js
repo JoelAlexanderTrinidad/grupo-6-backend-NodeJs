@@ -1,5 +1,5 @@
 const createHttpError = require('http-errors')
-const { Transactions } = require('../database/models')
+const { Transaction } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 const { ErrorObject } = require("../helpers/error");
@@ -133,5 +133,5 @@ module.exports =  {
     }
   }),
 };
-}
+
 

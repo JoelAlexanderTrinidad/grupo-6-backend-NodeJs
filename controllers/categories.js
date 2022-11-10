@@ -125,6 +125,6 @@ module.exports = {
 
   }),
 }
-}
+
 // example of a controller. First call the service, then build the controller method
 
