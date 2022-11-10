@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * /categories:
+ *   get:
+ *     summary: Retrieve from controllers
+ *     description: Retrieve a list of users from JSONPlaceholder
+*/
 const createHttpError = require('http-errors')
 const { Category } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
