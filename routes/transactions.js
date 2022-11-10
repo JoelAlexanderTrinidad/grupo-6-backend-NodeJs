@@ -49,62 +49,43 @@ const router = express.Router()
 *     - ApiKeyAuth: []
 */
 /**
- * @swagger
- * /transactions/{id}:
- *   delete:
- *     summary: Retrieve from controllers
- *     parameters:
- *       - in: query
- *         name: mode
- *         schema:
- *           type: string
- *         description: The mode of a workout
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *    security:
- *    - ApiKeyAuth: []
- */
+ /
+* @swagger
+* /transactions/{id}:
+*  delete:
+*    summary: returns the list of all  transactions 
+*    tags: [transactions]
+*    responses:
+*      200:
+*         description: the list of all transactions
+*         content:
+*            application/json:
+*              schema:
+*                type: array
+*                items:
+*                  $ref: '#/components/schemas/transactions'
+*    security:
+*     - ApiKeyAuth: []
+*/
 /**
- * @swagger
- * /transactions/{id}:
- *   delete:
- *     summary: Retrieve from controllers
- *     parameters:
- *       - in: query
- *         name: mode
- *         schema:
- *           type: string
- *         description: The mode of a workout
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: OK
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *
- */
+ /
+* @swagger
+* /transactions/{id}:
+*  get:
+*    summary: returns the list of all  transactions 
+*    tags: [transactions]
+*    responses:
+*      200:
+*         description: the list of all transactions
+*         content:
+*            application/json:
+*              schema:
+*                type: array
+*                items:
+*                  $ref: '#/components/schemas/transactions'
+*    security:
+*     - ApiKeyAuth: []
+*/
 router
     .get('/?', get)
     .get('/:id', getTransaction)
