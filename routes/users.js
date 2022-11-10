@@ -51,18 +51,33 @@ const router = express.Router();
  /
 * @swagger
 * /users/{id}:
-*  delete:
-*    summary: returns the list of all  users 
+*  get:
+*    summary: Find users by ID
 *    tags: [users]
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of users to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64
 *    responses:
-*      200:
-*         description: the list of all users
-*         content:
+*        '200':
+*          description: successfuly operation
+*          content:
 *            application/json:
 *              schema:
-*                type: array
-*                items:
-*                  $ref: '#/components/schemas/users'
+*                $ref: '#/components/schemas/users'
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/users'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: users not found
+*        '500':
+*          description: error of server
 *    security:
 *     - ApiKeyAuth: []
 */
@@ -70,18 +85,33 @@ const router = express.Router();
  /
 * @swagger
 * /users/{id}:
-*  get:
-*    summary: returns the list of all  users 
+*  delete:
+*    summary: Find users by ID
 *    tags: [users]
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of users to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64
 *    responses:
-*      200:
-*         description: the list of all users
-*         content:
+*        '200':
+*          description: successfuly operation
+*          content:
 *            application/json:
 *              schema:
-*                type: array
-*                items:
-*                  $ref: '#/components/schemas/users'
+*                $ref: '#/components/schemas/users'
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/users'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: users not found
+*        '500':
+*          description: error of server
 *    security:
 *     - ApiKeyAuth: []
 */
