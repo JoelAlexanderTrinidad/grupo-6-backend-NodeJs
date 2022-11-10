@@ -17,10 +17,23 @@ module.exports = {
   users: catchAsync(async (req, res, next) => {
     try {
       const users = await User.findAll();
+
+      const usersPromises = users.map(async user => {
+        // Create firebase img ref and get the full path
+        const imgRef = ref(storage, user.avatar);
+        const url = await getDownloadURL(imgRef);
+
+        // Update the user's profileImgUrl property
+        user.avatar = url;
+        return user;
+      });
+      const usersResolved = await Promise.all(usersPromises);
+
       endpointResponse({
         res,
         message: 'Users retrieved successfully',
         body: users,
+        body: usersResolved,
       });
     } catch (error) {
       const httpError = createHttpError(
@@ -42,7 +55,6 @@ module.exports = {
       const url = await getDownloadURL(imgRef);
       //Update user's image property
       user.avatar = url;
-
       if (!user) {
         return res.status(404).json({
           status: 'error',
