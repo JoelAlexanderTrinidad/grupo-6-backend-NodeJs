@@ -1,17 +1,11 @@
-
-const express = require('express')
-const {
-     getCategories, deleteCategory, getCategoriesById
-    } = require('../controllers/categories')
-
-const router = express.Router()
+const router = require('express').Router()
+const { postCategories, putCategories, getCategories, deleteCategory, getCategoriesById } = require('../controllers/categories')
 
 router.get('/', getCategories)
-
-
-router.delete("/:id", deleteCategory);
-
 router.get('/:id', getCategoriesById)
+router.delete("/:id", deleteCategory);
+router.post('/', postCategories)
+router.put('/:id', putCategories)
 
 
 module.exports = router

@@ -1,11 +1,11 @@
 const express = require('express')
+const router = express.Router();
 
 const usersRouter = require('./users')
 const categoriesRouter = require('./categories')
 const transactionsRouter = require('./transactions')
 const authRouter = require('./auth')
 
-const router = express.Router();
 
 router.use('/users', usersRouter)
 router.use('/transactions', transactionsRouter)

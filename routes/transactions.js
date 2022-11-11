@@ -1,4 +1,8 @@
+
 const express = require('express')
+
+
+const router = require('express').Router()
 
 const {
   get,
@@ -6,8 +10,6 @@ const {
   post,
   deleteTransaction,
 } = require("../controllers/transactions");
-
-const router = express.Router()
 
 router
     .get('/?', get)

@@ -1,11 +1,13 @@
-const { catchAsync } = require("../helpers/catchAsync");
-const createHttpError = require("http-errors");
-const { Transaction } = require("../database/models");
-const { endpointResponse } = require("../helpers/success");
+
+const createHttpError = require('http-errors')
+const { Transaction } = require('../database/models')
+const { endpointResponse } = require('../helpers/success')
+const { catchAsync } = require('../helpers/catchAsync')
+
 const { ErrorObject } = require("../helpers/error");
 
-module.exports = {
-  get: catchAsync(async (req, res, next) => {
+module.exports =  {
+    get: catchAsync(async (req, res, next) => {
     const userId = req.query;
     try {
       if (Object.entries(userId).length === 0) {
@@ -132,4 +134,5 @@ module.exports = {
       next(httpError);
     }
   }),
+
 };
