@@ -10,21 +10,15 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
-      },
-      deletedAt: {
-        type: Sequelize.STRING
-      },
-      deletedAt: {
-        type: Sequelize.STRING
+        allowNull: false
       },
       description: {
         type: Sequelize.STRING,
+        allowNull: false
       },
-      deletedAt: {
-        type: Sequelize.STRING
-      },
-      deletedAt: {
-        type: Sequelize.STRING
+        deletedAt: {
+        type: Sequelize.STRING,
+        defaultValue: 'Activo'
       },
       deletedAt: {
         type: Sequelize.STRING
@@ -36,9 +30,6 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-      },
-      deletedAt: {
-        type: Sequelize.STRING,
       },
     });
   },
