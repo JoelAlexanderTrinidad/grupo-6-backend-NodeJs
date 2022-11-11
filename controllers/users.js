@@ -10,31 +10,7 @@ module.exports = {
   //GET all users
   users: catchAsync(async (req, res, next) => {
     try {
-      // 
-      const limit = 10
-      let page = 1
-      let offset = 0
-      let linkPrevious = null
-      let linkNext = null
-      if (req.query.page >= 1) {
-        page = parseInt(req.query.page)
-        offset = page*limit
-        linkPrevious = baseUrl + (page - 1)
-      }
-            
-      const query = await User.findAndCountAll(
-        {attributes:['id','firstName','lastName','email','createdAt'],
-        limit: limit,
-        offset: offset
-      });
-      
-      const baseUrl = "http://localhost:3000/users?page=";
-      const totalPages = (query.count)/limit
-      if(totalPages-page >= 0){ 
-      linkNext = baseUrl + (page + 1)
-      }
-      const users = {...query,linkPrevious,linkNext}
-    
+      const users = await User.findAll();    
       endpointResponse({
         res,
         message: "Users retrieved successfully",
