@@ -85,6 +85,7 @@ module.exports =  {
           userId: req.body.userId,
           categoryId: req.body.categoryId,
           amount: req.body.amount,
+          date:req.body.date
         });
         const savedTransaction = await newTransaction.save();
         endpointResponse({
