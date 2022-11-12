@@ -10,7 +10,7 @@ module.exports = {
   //GET all users
   users: catchAsync(async (req, res, next) => {
     try {
-      const users = await User.findAll();
+      const users = await User.findAll();    
       endpointResponse({
         res,
         message: "Users retrieved successfully",
@@ -22,8 +22,7 @@ module.exports = {
         `[Error retrieving users] - [index - GET]: ${error.message}`
       );
       next(httpError);
-    }
-  }),
+    }}),
 
   //GET user by Id
   userById: catchAsync(async (req, res, next) => {
