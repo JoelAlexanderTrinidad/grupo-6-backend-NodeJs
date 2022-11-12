@@ -16,26 +16,23 @@ module.exports = {
       let linkPrevious = null
       let linkNext = null
       const baseUrl = "http://localhost:3000/users?page=";
-      if (req.query.page >= 1) {
+      if (req.query.page >1) {
         page = parseInt(req.query.page)
         offset = page*limit
-        
-      }
+        }
 
       const query = await User.findAndCountAll(
         {attributes:['id','firstName','lastName','email','createdAt'],
         limit: limit,
         offset: offset
       });
-
-      
       const totalPages = (query.count)/limit
-      console.log(totalPages)
-      if(totalPages-page >= 1){ 
+      
+      if(totalPages-page >= 0){ 
       linkNext = baseUrl + (page + 1)
       }
       if(page > 1){ 
-        linkNext = baseUrl + (page + 1)
+        linkPrevious = baseUrl + (page - 1)
         }
       const users = {...query,linkPrevious,linkNext}
       endpointResponse({
