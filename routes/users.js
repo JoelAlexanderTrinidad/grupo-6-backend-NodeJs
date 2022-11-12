@@ -115,6 +115,23 @@ const router = express.Router();
 *    security:
 *     - ApiKeyAuth: []
 */
+/**
+ * @swagger
+ *  /users/:
+ *   post:
+ *    summary: create a new user
+ *    tags: [users]
+ *    requestBody:
+ *     required: true
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        $ref: '#components/schemas/users'
+ *    responses:
+ *     200:
+ *      description: A new transaction has been created!
+ */
 router.get("/", users);
 router.get("/:id", userById);
 router.post('/', validator(postValidationSchema), post)
