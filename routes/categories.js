@@ -71,10 +71,10 @@ const router = express.Router();
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/categories'
+*                $ref: '#/components/schemas/category'
 *            application/xml:
 *              schema:
-*                $ref: '#/components/schemas/categories'
+*                $ref: '#/components/schemas/category'
 *        '400':
 *          description: Invalid ID supplied
 *        '404':
@@ -105,10 +105,10 @@ const router = express.Router();
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/categories'
+*                $ref: '#/components/schemas/category'
 *            application/xml:
 *              schema:
-*                $ref: '#/components/schemas/categories'
+*                $ref: '#/components/schemas/category'
 *        '400':
 *          description: Invalid ID supplied
 *        '404':
@@ -138,7 +138,7 @@ const router = express.Router();
  *      application/json:
  *       schema:
  *        type: object
- *        $ref: '#components/schemas/categories'
+ *        $ref: '#components/schemas/category'
  *    responses:
  *     200:
  *      description: A new categories has been created!
@@ -155,7 +155,7 @@ const router = express.Router();
  *      application/json:
  *       schema:
  *        type: object
- *        $ref: '#components/schemas/categories'
+ *        $ref: '#components/schemas/category'
  *    responses:
  *     200:
  *      description: A new categories has been created!
