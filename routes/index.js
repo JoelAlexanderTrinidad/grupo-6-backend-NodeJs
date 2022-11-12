@@ -1,5 +1,4 @@
 
-
 const express = require('express')
 const router = express.Router();
 
@@ -8,7 +7,7 @@ const categoriesRouter = require('./categories')
 const transactionsRouter = require('./transactions')
 const authRouter = require('./auth')
 //const docRouter = require('./api-docs.js')
-const router = express.Router();
+
 
 router.use('/users', usersRouter)
 router.use('/transactions', transactionsRouter)

@@ -118,7 +118,56 @@ const router = express.Router();
 *    security:
 *     - ApiKeyAuth: []
 */
-
+/**
+ * @swagger
+ *  /categories/{id}:
+ *   put:
+ *    summary: create a new categories
+ *    tags: [categories]
+ *    parameters:
+*       - name: id
+*         in: path
+*         description: ID of categories to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64
+ *    requestBody:
+ *     required: true
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        $ref: '#components/schemas/categories'
+ *    responses:
+ *     200:
+ *      description: A new categories has been created!
+ */
+/**
+ * @swagger
+ *  /categories:
+ *   post:
+ *    summary: create a new categories
+ *    tags: [categories]
+ *    parameters:
+*       - name: id
+*         in: path
+*         description: ID of categories to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64
+ *    requestBody:
+ *     required: true
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        $ref: '#components/schemas/categories'
+ *    responses:
+ *     200:
+ *      description: A new categories has been created!
+ */
 
 router.get('/', getCategories)
 router.get('/:id', getCategoriesById)
