@@ -1,7 +1,9 @@
+
 const createHttpError = require('http-errors')
-const { Transaction } = require('../database/models')
+const { Transactions } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
+
 const { ErrorObject } = require("../helpers/error");
 
 module.exports =  {
@@ -24,7 +26,7 @@ module.exports =  {
         let queryResult = []
         
     if(!req.query.hasOwnProperty('query')){
-      queryResult = await Transaction.findAndCountAll(
+      queryResult = await Transactions.findAndCountAll(
       {
           limit:limit,
           offset:offset
@@ -39,13 +41,14 @@ module.exports =  {
             linkPrevious = baseUrl + (page - 1)
             }}
 
+
    if(req.query.hasOwnProperty('query')){
     if (isNaN(req.query.query)) {
       throw new ErrorObject("Invalid format, you must enter a number", 404);
     }
     
    const userId = req.query.query
-     queryResult = await Transaction.findAndCountAll(
+     queryResult = await Transactions.findAndCountAll(
         {
           where: {
             userId: userId,
@@ -84,7 +87,7 @@ module.exports =  {
 
   getTransaction: catchAsync(async (req, res, next) => {
     try {
-      const response = await Transaction.findByPk(req.params.id);
+      const response = await Transactions.findByPk(req.params.id);
 
       if (isNaN(req.params.id)) {
         let error = new ErrorObject("Transaction not found", 400, [
@@ -111,13 +114,16 @@ module.exports =  {
       next(httpError);
     }
   }),
-  post: catchAsync(async (req, res, next) => {
+ post: catchAsync(async (req, res, next) => {
     try {
-      if (req.body.userId && req.body.categoryId && req.body.amount) {
-        const newTransaction = new Transaction({
+      if (req.body.userId && req.body.categoryId && req.body.amount && req.body.description && req.body.date) {
+        const newTransaction = new Transactions({
+          description: req.body.description,
           userId: req.body.userId,
           categoryId: req.body.categoryId,
           amount: req.body.amount,
+          date: req.body.date,
+          date:req.body.date
         });
         const savedTransaction = await newTransaction.save();
         endpointResponse({
@@ -129,8 +135,7 @@ module.exports =  {
         {
           throw new ErrorObject("fields could not be validated", 400);
         }
-      }
-    } catch (error) {
+      }} catch (error) {
       const httpError = createHttpError(
         error.statusCode,
         `[Error retrieving transactions]- [index- POST]:${error.message}`
@@ -142,7 +147,7 @@ module.exports =  {
    
     try {
     const transactionId = req.params.id;
-    const searchedTransaction = await Transaction.findOne({
+    const searchedTransaction = await Transactions.findOne({
       where: { id: transactionId },
     });
 
@@ -150,7 +155,7 @@ module.exports =  {
       throw new ErrorObject(`Transaction with id ${transactionId} was not found`, 404);
     }
 
-    const deletedTransaction = await Transaction.destroy({ where: { id: transactionId } });
+    const deletedTransaction = await Transactions.destroy({ where: { id: transactionId } });
 
     if (deletedTransaction) {
       endpointResponse({
@@ -167,6 +172,5 @@ module.exports =  {
       next(httpError);
     }
   }),
+
 };
-
-

@@ -11,15 +11,7 @@ module.exports = {
       firstName: {
         type: Sequelize.STRING,
       },
-      deletedAt: {
-        type: Sequelize.STRING
-      },
-      deletedAt: {
-        type: Sequelize.STRING
-      },
-      deletedAt: {
-        type: Sequelize.STRING
-      },
+      
       lastName: {
         type: Sequelize.STRING,
       },

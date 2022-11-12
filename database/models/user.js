@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       User.belongsTo(models.Role, { foreignKey: 'roleId' });
-      User.belongsTo(models.Transaction, {foreignKey: 'id'})
+      User.belongsTo(models.Transactions, {foreignKey: 'id'})
     }
   };
   User.init({

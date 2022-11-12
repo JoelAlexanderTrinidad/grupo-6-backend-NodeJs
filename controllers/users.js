@@ -10,6 +10,7 @@ module.exports = {
   //GET all users
   users: catchAsync(async (req, res, next) => {
     try {
+
       const limit = 10
       let page = 1
       let offset = 0
@@ -41,6 +42,7 @@ module.exports = {
         linkPrevious = baseUrl + (page - 1)
         }
       const users = {...query,linkPrevious,linkNext}
+
       endpointResponse({
         res,
         message: "Users retrieved successfully",
@@ -52,8 +54,7 @@ module.exports = {
         `[Error retrieving users] - [index - GET]: ${error.message}`
       );
       next(httpError);
-    }
-  }),
+    }}),
 
   //GET user by Id
   userById: catchAsync(async (req, res, next) => {
