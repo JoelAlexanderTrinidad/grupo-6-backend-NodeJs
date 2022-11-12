@@ -1,7 +1,10 @@
-const createHttpError = require('http-errors')
-const { Category } = require('../database/models')
-const { endpointResponse } = require('../helpers/success')
-const { catchAsync } = require('../helpers/catchAsync')
+
+const createHttpError = require("http-errors");
+const { Category } = require("../database/models");
+const { endpointResponse } = require("../helpers/success");
+const { catchAsync } = require("../helpers/catchAsync");
+
+// example of a controller. First call the service, then build the controller method
 module.exports = {
     postCategories: catchAsync(async(req, res, next) => {
         try {
@@ -56,18 +59,18 @@ module.exports = {
     }),
     getCategories: catchAsync(async (req, res, next) => {
     try {
-      const response = await Category.findAll() 
+      const response = await Category.findAll();
       endpointResponse({
         res,
-        message: 'Categories retrieved successfully',
+        message: "Categories retrieved successfully",
         body: response,
-      })
+      });
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving Categories] - [index - GET]: ${error.message}`,
-      )
-      next(httpError)
+        `[Error retrieving Categories] - [index - GET]: ${error.message}`
+      );
+      next(httpError);
     }
   }),
   deleteCategory: catchAsync(async (req, res, next) => {

@@ -78,13 +78,15 @@ module.exports =  {
       next(httpError);
     }
   }),
-  post: catchAsync(async (req, res, next) => {
+ post: catchAsync(async (req, res, next) => {
     try {
-      if (req.body.userId && req.body.categoryId && req.body.amount) {
+      if (req.body.userId && req.body.categoryId && req.body.amount && req.body.description && req.body.date) {
         const newTransaction = new Transaction({
+          description: req.body.description,
           userId: req.body.userId,
           categoryId: req.body.categoryId,
           amount: req.body.amount,
+          date: req.body.date,
           date:req.body.date
         });
         const savedTransaction = await newTransaction.save();
@@ -97,8 +99,7 @@ module.exports =  {
         {
           throw new ErrorObject("fields could not be validated", 400);
         }
-      }
-    } catch (error) {
+      }} catch (error) {
       const httpError = createHttpError(
         error.statusCode,
         `[Error retrieving transactions]- [index- POST]:${error.message}`
