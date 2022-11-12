@@ -16,9 +16,15 @@ module.exports = {
       let linkPrevious = null
       let linkNext = null
       const baseUrl = "http://localhost:3000/users?page=";
+
+      if(req.query.hasOwnProperty('page')){
+        if (isNaN(req.query.page)) {
+          throw new ErrorObject("Invalid format, you must enter a number", 404);
+        }}
+
       if (req.query.page >1) {
         page = parseInt(req.query.page)
-        offset = page*limit
+        offset = (page-1)*limit
         }
 
       const query = await User.findAndCountAll(
@@ -26,9 +32,9 @@ module.exports = {
         limit: limit,
         offset: offset
       });
-      const totalPages = (query.count)/limit
-      
-      if(totalPages-page >= 0){ 
+      const itemsCount = query.count - (page*limit)
+      console.log(query.count)
+      if(itemsCount > 0){ 
       linkNext = baseUrl + (page + 1)
       }
       if(page > 1){ 

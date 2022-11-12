@@ -19,7 +19,7 @@ module.exports =  {
       
         if (parseInt(req.query.page) > 1) {
           page = parseInt(req.query.page)
-          offset = page*limit
+          offset = (page-1)*limit
         } 
         let queryResult = []
         
@@ -30,9 +30,9 @@ module.exports =  {
           offset:offset
       })
      
-        const totalPages = (queryResult.count)/limit
+      const itemsCount = queryResult.count - (page*limit)
         
-        if(totalPages-page >= 0){ 
+        if(itemsCount +1 > 0){ 
           linkNext = baseUrl + (page + 1)
           }
         if(page > 1){ 
@@ -53,13 +53,13 @@ module.exports =  {
            limit:limit,
           offset:offset
          })
-
+        
        if (queryResult.count === 0) {
       throw new ErrorObject("The user does not exist", 404);
       }
-        const totalPages = (queryResult.count)/limit
-       
-        if(totalPages-page >= 0){ 
+        const itemsCount = queryResult.count -(page*limit)
+       console.log(itemsCount)
+        if(itemsCount > 0){ 
           linkNext = baseUrl + (page + 1)+ "&query="+userId
           }
         if(page > 1){ 
@@ -87,12 +87,12 @@ module.exports =  {
       const response = await Transaction.findByPk(req.params.id);
 
       if (isNaN(req.params.id)) {
-        let error = new ErrorObject("Transaction no found", 400, [
+        let error = new ErrorObject("Transaction not found", 400, [
           "Invalid format, you must enter a number",
         ]);
         return res.status(400).json(error);
       } else if (!response) {
-        let error = new ErrorObject("Transaction no found", 400, [
+        let error = new ErrorObject("Transaction not found", 400, [
           "The transaction number does not exist",
         ]);
         return res.status(400).json(error);

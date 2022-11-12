@@ -4,7 +4,7 @@ const transactions = [
   {
     description: 'This is a description of a transaction',
     amount: 50000,
-    userId: 3,
+    userId: 1,
     categoryId: 1,
     date: new Date(),
     createdAt: new Date(),
@@ -22,7 +22,7 @@ const transactions = [
   {
     description: 'This is a description of a transaction',
     amount: 8000,
-    userId: 2,
+    userId: 1,
     categoryId: 1,
     date: new Date(),
     createdAt: new Date(),
@@ -31,7 +31,7 @@ const transactions = [
   {
     description: 'This is a description of a transaction',
     amount: 3200,
-    userId: 5,
+    userId: 1,
     categoryId: 1,
     date: new Date(),
     createdAt: new Date(),
@@ -40,7 +40,7 @@ const transactions = [
   {
     description: 'This is a description of a transaction',
     amount: 90000,
-    userId: 4,
+    userId: 1,
     categoryId: 2,
     date: new Date(),
     createdAt: new Date(),
