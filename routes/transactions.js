@@ -38,14 +38,96 @@ const {
  *        categoryId: 2
  *        date: 2022-11-11
  */
-
-
-router.get("/?", get);
-router.get("/:id", getTransaction);
-
+/**
+ /
+* @swagger
+* /transactions/:
+*  get:
+*    summary: returns the list of all  transactions 
+*    tags: [transactions]
+*    responses:
+*      200:
+*         description: the list of all transactions
+*         content:
+*            application/json:
+*              schema:
+*                type: array
+*                items:
+*                  $ref: '#/components/schemas/transactions'
+*    security:
+*     - ApiKeyAuth: []
+*/
+/**
+ /
+* @swagger
+* /transactions/{id}:
+*  get:
+*    summary: Find transactions by ID
+*    tags: [transactions]
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of transactions to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64
+*    responses:
+*        '200':
+*          description: successfuly operation
+*          content:
+*            application/json:
+*              schema:
+*                $ref: '#/components/schemas/transactions'
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/transactions'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: transactions not found
+*        '500':
+*          description: error of server
+*    security:
+*     - ApiKeyAuth: []
+*/
+/**
+ /
+* @swagger
+* /transactions/{id}:
+*  delete:
+*    summary: Find transactions by ID
+*    tags: [transactions]
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of transactions to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64
+*    responses:
+*        '200':
+*          description: successfuly operation
+*          content:
+*            application/json:
+*              schema:
+*                $ref: '#/components/schemas/transactions'
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/transactions'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: transactions not found
+*        '500':
+*          description: error of server
+*    security:
+*     - ApiKeyAuth: []
+*/
 /**
  * @swagger
- *  /transactions/:
+ *  /transactions:
  *   post:
  *    summary: create a new transaction
  *    tags: [Transactions]
@@ -55,11 +137,14 @@ router.get("/:id", getTransaction);
  *      application/json:
  *       schema:
  *        type: object
- *        $ref: '#components/schemas/Transactions'
+ *        $ref: '#components/schemas/transactions'
  *    responses:
  *     200:
  *      description: A new transaction has been created!
  */
+
+router.get("/?", get);
+router.get("/:id", getTransaction);
 router.post("/", post);
 router.delete("/:id", deleteTransaction);
 

@@ -117,10 +117,35 @@ const router = express.Router();
 */
 /**
  * @swagger
- *  /users/:
+ *  /users:
  *   post:
  *    summary: create a new user
  *    tags: [users]
+ *    requestBody:
+ *     required: true
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        $ref: '#components/schemas/users'
+ *    responses:
+ *     200:
+ *      description: A new transaction has been created!
+ */
+/**
+ * @swagger
+ *  /users/{id}:
+ *   put:
+ *    summary: create a new user
+ *    tags: [users]
+ *    parameters:
+*       - name: id
+*         in: path
+*         description: ID of users to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64
  *    requestBody:
  *     required: true
  *     content:
