@@ -132,7 +132,7 @@ const {
  *  /transactions:
  *   post:
  *    summary: create a new transaction
- *    tags: [Transactions]
+ *    tags: [transactions]
  *    requestBody:
  *     required: true
  *     content:

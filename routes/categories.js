@@ -149,14 +149,6 @@ const router = express.Router();
  *   post:
  *    summary: create a new categories
  *    tags: [categories]
- *    parameters:
-*       - name: id
-*         in: path
-*         description: ID of categories to return
-*         required: true
-*         schema:
-*           type: integer
-*           format: int64
  *    requestBody:
  *     required: true
  *     content:
@@ -168,7 +160,6 @@ const router = express.Router();
  *     200:
  *      description: A new categories has been created!
  */
-
 router.get('/', getCategories)
 router.get('/:id', getCategoriesById)
 router.delete("/:id", deleteCategory);
