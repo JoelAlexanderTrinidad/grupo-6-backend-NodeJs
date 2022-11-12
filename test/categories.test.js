@@ -7,12 +7,11 @@ describe('Categories endpoints (CRUD) tests', () => {
 
     it('should list all categories (GET /categories)', async function() {
         let response = await myReq.get('/categories')
-        console.log(response.body)
         expect(response.body.code).to.eql(200);
         expect(response.body.body.length).to.eql(0);
     })
 
-    it('should add a product (POST /categories)', async function() {
+    it('should add a category (POST /categories)', async function() {
         const category = {
             name: "prueba",
             description: "test category"
@@ -41,7 +40,7 @@ describe('Categories endpoints (CRUD) tests', () => {
         expect(response.statusCode).to.be.equal(500);
     })
 
-    it('should update a created product (PUT /categories/:id)', async () => {
+    it('should update a existing category (PUT /categories/:id)', async () => {
         const newCategory = {
             name: "prueba",
             description: "TEST category"
@@ -59,7 +58,21 @@ describe('Categories endpoints (CRUD) tests', () => {
         expect(response.body.code).to.be.equal(200);
     })
 
-    it('should show an error if update product has a wrong format (PUT /categories/:id)', async () => {
+    it('should show an error if searched category id does not exist (PUT /categories/:id', async () => {
+        const newCategory = {
+            name: "prueba",
+            description: "TEST categoryyy"
+        }
+
+        let categoryId = 88888889;
+
+        let response = await myReq.put(`/categories/${categoryId}`).send(newCategory);
+
+        expect(response.statusCode).to.eql(404);
+        expect(response.body.code).to.eql(undefined); 
+    })
+
+    it('should show an error if updated category has a wrong format (PUT /categories/:id)', async () => {
         const newCategory = {
             nombre: "prueba",
             description: "TEST category"
@@ -73,10 +86,7 @@ describe('Categories endpoints (CRUD) tests', () => {
 
         let modifiedCategory = response.body.body;
 
-        expect(modifiedCategory[0]).to.eql(1);
-
-
-
+        expect(modifiedCategory[0]).to.eql(0);
     })
 
     it('should delete category with given id (DELETE /categories/:id)', async function() {
