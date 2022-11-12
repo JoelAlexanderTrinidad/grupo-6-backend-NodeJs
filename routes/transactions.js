@@ -1,4 +1,6 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
+
 const {
   get,
   getTransaction,
@@ -6,120 +8,59 @@ const {
   deleteTransaction,
 } = require("../controllers/transactions");
 
-const router = express.Router()
 /**
- * /
  * @swagger
  * components:
  *  schemas:
- *    transactions:
+ *    Transactions:
  *      type: object
- *      requires:
- *        -name
- *        -description
  *      properties:
- *        description:
- *          type: string
- *          description: This is the description of the transaction
- *        name:
- *          type: string
- *          description: transaction
- *        deletedAt:
- *          type: date
- *          description: This is the date of delete of the transaction
- * 
+ *       description:
+ *        type: string
+ *        description: A description of a transaction
+ *       amount:
+ *        type: number
+ *        description: A amount
+ *       userId:
+ *        type: integer
+ *        description: A user identifier
+ *       categoryId:
+ *        type: integer
+ *        description: A category identifier
+ *       date:
+ *        type: string
+ *        format: date
+ *        description: Date of a transaction
+ *       example:
+ *        description: this is a transaction description
+ *        amount: 2000
+ *        userId: 1
+ *        categoryId: 2
+ *        date: 2022-11-11
  */
-/**
- /
-* @swagger
-* /transactions:
-*  get:
-*    summary: returns the list of all  transactions 
-*    tags: [transactions]
-*    responses:
-*      200:
-*         description: the list of all transactions
-*         content:
-*            application/json:
-*              schema:
-*                type: array
-*                items:
-*                  $ref: '#/components/schemas/transactions'
-*    security:
-*     - ApiKeyAuth: []
-*/
-/**
- /
-* @swagger
-* /transactions/{id}:
-*  get:
-*    summary: Find transaction by ID
-*    tags: [transactions]
-*    parameters:
-*       - name: id
-*         in: path
-*         description: ID of transaction to return
-*         required: true
-*         schema:
-*           type: integer
-*           format: int64
-*    responses:
-*        '200':
-*          description: successfuly operation
-*          content:
-*            application/json:
-*              schema:
-*                $ref: '#/components/schemas/transactions'
-*            application/xml:
-*              schema:
-*                $ref: '#/components/schemas/transactions'
-*        '400':
-*          description: Invalid ID supplied
-*        '404':
-*          description: transaction not found
-*        '500':
-*          description: error of server
-*    security:
-*     - ApiKeyAuth: []
-*/
-/**
- /
-* @swagger
-* /transactions/{id}:
-*  delete:
-*    summary: Find transaction by ID
-*    tags: [transactions]
-*    parameters:
-*       - name: id
-*         in: path
-*         description: ID of transaction to return
-*         required: true
-*         schema:
-*           type: integer
-*           format: int64
-*    responses:
-*        '200':
-*          description: successfuly operation
-*          content:
-*            application/json:
-*              schema:
-*                $ref: '#/components/schemas/transactions'
-*            application/xml:
-*              schema:
-*                $ref: '#/components/schemas/transactions'
-*        '400':
-*          description: Invalid ID supplied
-*        '404':
-*          description: transaction not found
-*        '500':
-*          description: error of server
-*    security:
-*     - ApiKeyAuth: []
-*/
-router
-    .get('/?', get)
-    .get('/:id', getTransaction)
-    .post("/", post)
-    .delete("/:id",deleteTransaction)
 
-module.exports = router
+
+router.get("/?", get);
+router.get("/:id", getTransaction);
+
+/**
+ * @swagger
+ *  /transactions/:
+ *   post:
+ *    summary: create a new transaction
+ *    tags: [Transactions]
+ *    requestBody:
+ *     required: true
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        $ref: '#components/schemas/Transactions'
+ *    responses:
+ *     200:
+ *      description: A new transaction has been created!
+ */
+router.post("/", post);
+router.delete("/:id", deleteTransaction);
+
+module.exports = router;

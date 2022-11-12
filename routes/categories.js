@@ -116,6 +116,7 @@ const router = express.Router();
 *    security:
 *     - ApiKeyAuth: []
 */
+
 router.get("/", getCategories);
 
 router.delete("/:id", deleteCategory);
