@@ -57,16 +57,17 @@ module.exports = {
       req.body.password
         ? true
         : null;
+    try {
     const emailDoesExist = await User.findOne({
       where: { email: req.body.email },
     });
     const thereIsAvatar = req.body.avatar || null;
     const thereIsRole = req.body.roleId || null;
 
-    try {
       if (emailDoesExist) {
         throw new ErrorObject('Email is already in use', 403);
       }
+      console.log(formatIsOk)
 
       if (formatIsOk) {
         const hashedPassword = createHash(req.body.password);

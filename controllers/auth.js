@@ -17,12 +17,15 @@ module.exports = {
   login: catchAsync(async (req, res, next) => {
     try {
       const { email, password } = req.body;
+      // console.log(email, password)
       const emailAndPassExists = email && password ? true : null;
+      // console.log(emailAndPassExists)
       if (!emailAndPassExists) {
         throw new ErrorObject('Missing email or password fields', 400);
       }
 
       const userExists = await User.findOne({ raw: true, where: { email } });
+      // console.log(!userExists)
       if (!userExists) {
         throw new ErrorObject('User does not exist', 404);
       }
@@ -30,7 +33,7 @@ module.exports = {
       const hashedPassword = userExists.password;
       const passwordMatches =
         userExists && isValidPassword(hashedPassword, password) ? true : null;
-
+        console.log(passwordMatches)
       //Generate JWT
       const token = await jwt.sign(
         { id: userExists.id },
@@ -39,6 +42,7 @@ module.exports = {
           expiresIn: process.env.JWT_EXPIRES_IN,
         }
       );
+      console.log(token)
 
       //For security, it hides the user's password.
       userExists.password = undefined;

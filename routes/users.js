@@ -14,12 +14,12 @@ const {
 
 const router = express.Router();
 
-router.post('/', post);
 
 //Apply protectTokenMiddleware
-router.use(protectToken);
+// router.use(protectToken);
 //routes affeceted for protectToken
 router.get('/', users);
+router.post('/', post);
 router.get('/:id', userById);
 router.put('/:id', put);
 router.delete('/:id', deleteUser);
