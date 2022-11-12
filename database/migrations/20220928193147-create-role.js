@@ -14,10 +14,7 @@ module.exports = {
       deletedAt: {
         type: Sequelize.STRING
       },
-      deletedAt: {
-        type: Sequelize.STRING
-      },
-      description: {
+    ription: {
         type: Sequelize.STRING,
       },
       createdAt: {
