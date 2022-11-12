@@ -8,39 +8,74 @@ const { ErrorObject } = require("../helpers/error");
 
 module.exports =  {
     get: catchAsync(async (req, res, next) => {
-    const userId = req.query;
+    
     try {
-      if (Object.entries(userId).length === 0) {
-        const response = await Transactions.findAll();
-        endpointResponse({
-          res,
-          message: "Transactions retrieved successfully",
-          body: response,
-        });
-      } else {
-        const response = await Transactions.findOne({
-          where: {
-            userId: userId.query,
-          },
-        });
-        if (isNaN(req.query.query)) {
-          let error = new ErrorObject("User transaction no found", 400, [
-            "Invalid format, you must enter a number",
-          ]);
-          return res.status(400).json(error);
-        } else if (!response) {
-          let error = new ErrorObject("User transaction no found", 404, [
-            "The user transaction number does not exist",
-          ]);
-          return res.status(404).json(error);
-        }
+      let page = 1
+      let offset = 0
+      let linkPrevious = null
+      let linkNext = null
+      const limit = 10
+      const baseUrl = "http://localhost:3000/transactions?page=";
+      
+      console.log(req.query)
+      
+        if (parseInt(req.query.page) > 1) {
+          page = parseInt(req.query.page)
+          offset = (page-1)*limit
+        } 
+        let queryResult = []
+        
+    if(!req.query.hasOwnProperty('query')){
+      queryResult = await Transactions.findAndCountAll(
+      {
+          limit:limit,
+          offset:offset
+      })
+     
+      const itemsCount = queryResult.count - (page*limit)
+        
+        if(itemsCount +1 > 0){ 
+          linkNext = baseUrl + (page + 1)
+          }
+        if(page > 1){ 
+            linkPrevious = baseUrl + (page - 1)
+            }}
 
-        endpointResponse({
-          res,
-          message: "Transactions retrieved successfully",
-          body: response,
-        });
+
+   if(req.query.hasOwnProperty('query')){
+    if (isNaN(req.query.query)) {
+      throw new ErrorObject("Invalid format, you must enter a number", 404);
+    }
+    
+   const userId = req.query.query
+     queryResult = await Transactions.findAndCountAll(
+        {
+          where: {
+            userId: userId,
+              },
+           limit:limit,
+          offset:offset
+         })
+        
+       if (queryResult.count === 0) {
+      throw new ErrorObject("The user does not exist", 404);
       }
+        const itemsCount = queryResult.count -(page*limit)
+       console.log(itemsCount)
+        if(itemsCount > 0){ 
+          linkNext = baseUrl + (page + 1)+ "&query="+userId
+          }
+        if(page > 1){ 
+            linkPrevious = baseUrl + (page - 1) + "&query="+userId
+        }}
+    const transactions = {...queryResult,linkPrevious,linkNext}
+        
+    endpointResponse({
+      res,
+      message: "Transactions retrieved successfully",
+        body: transactions,
+    });
+      
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
@@ -49,17 +84,18 @@ module.exports =  {
       next(httpError);
     }
   }),
+
   getTransaction: catchAsync(async (req, res, next) => {
     try {
       const response = await Transactions.findByPk(req.params.id);
 
       if (isNaN(req.params.id)) {
-        let error = new ErrorObject("Transaction no found", 400, [
+        let error = new ErrorObject("Transaction not found", 400, [
           "Invalid format, you must enter a number",
         ]);
         return res.status(400).json(error);
       } else if (!response) {
-        let error = new ErrorObject("Transaction no found", 400, [
+        let error = new ErrorObject("Transaction not found", 400, [
           "The transaction number does not exist",
         ]);
         return res.status(400).json(error);

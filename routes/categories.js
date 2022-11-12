@@ -162,9 +162,12 @@ const router = express.Router();
  */
 router.get('/', getCategories)
 router.get('/:id', getCategoriesById)
+
 router.delete("/:id", deleteCategory);
 router.post('/', postCategories)
 router.put('/:id', putCategories)
 
 
+
 module.exports = router;
+

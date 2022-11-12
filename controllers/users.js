@@ -10,7 +10,39 @@ module.exports = {
   //GET all users
   users: catchAsync(async (req, res, next) => {
     try {
-      const users = await User.findAll();    
+
+      const limit = 10
+      let page = 1
+      let offset = 0
+      let linkPrevious = null
+      let linkNext = null
+      const baseUrl = "http://localhost:3000/users?page=";
+
+      if(req.query.hasOwnProperty('page')){
+        if (isNaN(req.query.page)) {
+          throw new ErrorObject("Invalid format, you must enter a number", 404);
+        }}
+
+      if (req.query.page >1) {
+        page = parseInt(req.query.page)
+        offset = (page-1)*limit
+        }
+
+      const query = await User.findAndCountAll(
+        {attributes:['id','firstName','lastName','email','createdAt'],
+        limit: limit,
+        offset: offset
+      });
+      const itemsCount = query.count - (page*limit)
+      console.log(query.count)
+      if(itemsCount > 0){ 
+      linkNext = baseUrl + (page + 1)
+      }
+      if(page > 1){ 
+        linkPrevious = baseUrl + (page - 1)
+        }
+      const users = {...query,linkPrevious,linkNext}
+
       endpointResponse({
         res,
         message: "Users retrieved successfully",

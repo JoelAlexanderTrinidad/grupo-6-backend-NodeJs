@@ -111,7 +111,7 @@ module.exports = {
       const categoryResult = await  Category.findOne({
         where:[{id: filter}],
       })
-      console.log(categoryResult)
+      
       if (categoryResult === null){
         throw new ErrorObject('Category ID not exists', 404)
       }
