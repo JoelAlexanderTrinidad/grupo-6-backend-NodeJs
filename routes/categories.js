@@ -1,8 +1,13 @@
 //controllers
-const { deleteCategory } = require("../controllers/categories");
+const { deleteCategory } = require('../controllers/categories');
 
-const router = require("express").Router();
+const { protectToken } = require('../middlewares/protectTokenMiddleware');
 
-router.delete("/:id", deleteCategory);
+const router = require('express').Router();
+
+//Apply protectTokenMiddleware
+router.use(protectToken);
+//routes affeceted for protectToken
+router.delete('/:id', deleteCategory);
 
 module.exports = router;
