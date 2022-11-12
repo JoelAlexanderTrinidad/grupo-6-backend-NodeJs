@@ -1,6 +1,6 @@
 
 const createHttpError = require('http-errors')
-const { Transaction } = require('../database/models')
+const { Transactions } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 
@@ -11,14 +11,14 @@ module.exports =  {
     const userId = req.query;
     try {
       if (Object.entries(userId).length === 0) {
-        const response = await Transaction.findAll();
+        const response = await Transactions.findAll();
         endpointResponse({
           res,
           message: "Transactions retrieved successfully",
           body: response,
         });
       } else {
-        const response = await Transaction.findOne({
+        const response = await Transactions.findOne({
           where: {
             userId: userId.query,
           },
@@ -51,7 +51,7 @@ module.exports =  {
   }),
   getTransaction: catchAsync(async (req, res, next) => {
     try {
-      const response = await Transaction.findByPk(req.params.id);
+      const response = await Transactions.findByPk(req.params.id);
 
       if (isNaN(req.params.id)) {
         let error = new ErrorObject("Transaction no found", 400, [
@@ -81,7 +81,7 @@ module.exports =  {
  post: catchAsync(async (req, res, next) => {
     try {
       if (req.body.userId && req.body.categoryId && req.body.amount && req.body.description && req.body.date) {
-        const newTransaction = new Transaction({
+        const newTransaction = new Transactions({
           description: req.body.description,
           userId: req.body.userId,
           categoryId: req.body.categoryId,
@@ -111,7 +111,7 @@ module.exports =  {
    
     try {
     const transactionId = req.params.id;
-    const searchedTransaction = await Transaction.findOne({
+    const searchedTransaction = await Transactions.findOne({
       where: { id: transactionId },
     });
 
@@ -119,7 +119,7 @@ module.exports =  {
       throw new ErrorObject(`Transaction with id ${transactionId} was not found`, 404);
     }
 
-    const deletedTransaction = await Transaction.destroy({ where: { id: transactionId } });
+    const deletedTransaction = await Transactions.destroy({ where: { id: transactionId } });
 
     if (deletedTransaction) {
       endpointResponse({
