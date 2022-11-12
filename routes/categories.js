@@ -3,6 +3,8 @@ const {
   getCategories,
   deleteCategory,
   getCategoriesById,
+  postCategories,
+  putCategories
 } = require("../controllers/categories");
 
 const router = express.Router();
@@ -117,10 +119,12 @@ const router = express.Router();
 *     - ApiKeyAuth: []
 */
 
-router.get("/", getCategories);
 
+router.get('/', getCategories)
+router.get('/:id', getCategoriesById)
 router.delete("/:id", deleteCategory);
+router.post('/', postCategories)
+router.put('/:id', putCategories)
 
-router.get("/:id", getCategoriesById);
 
 module.exports = router;

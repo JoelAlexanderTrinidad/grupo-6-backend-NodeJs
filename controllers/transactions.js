@@ -1,12 +1,13 @@
 
-const { catchAsync } = require("../helpers/catchAsync");
-const createHttpError = require("http-errors");
-const { Transaction } = require("../database/models");
-const { endpointResponse } = require("../helpers/success");
+const createHttpError = require('http-errors')
+const { Transaction } = require('../database/models')
+const { endpointResponse } = require('../helpers/success')
+const { catchAsync } = require('../helpers/catchAsync')
+
 const { ErrorObject } = require("../helpers/error");
 
-module.exports = {
-  get: catchAsync(async (req, res, next) => {
+module.exports =  {
+    get: catchAsync(async (req, res, next) => {
     const userId = req.query;
     try {
       if (Object.entries(userId).length === 0) {
@@ -23,15 +24,15 @@ module.exports = {
           },
         });
         if (isNaN(req.query.query)) {
-          let error = new ErrorObject("User transaction no found", 404, [
-            "You must enter a number",
+          let error = new ErrorObject("User transaction no found", 400, [
+            "Invalid format, you must enter a number",
           ]);
           return res.status(400).json(error);
         } else if (!response) {
           let error = new ErrorObject("User transaction no found", 404, [
             "The user transaction number does not exist",
           ]);
-          return res.status(400).json(error);
+          return res.status(404).json(error);
         }
 
         endpointResponse({
@@ -53,12 +54,12 @@ module.exports = {
       const response = await Transaction.findByPk(req.params.id);
 
       if (isNaN(req.params.id)) {
-        let error = new ErrorObject("Transaction no found", 404, [
-          "You must enter a number",
+        let error = new ErrorObject("Transaction no found", 400, [
+          "Invalid format, you must enter a number",
         ]);
         return res.status(400).json(error);
       } else if (!response) {
-        let error = new ErrorObject("Transaction no found", 404, [
+        let error = new ErrorObject("Transaction no found", 400, [
           "The transaction number does not exist",
         ]);
         return res.status(400).json(error);
@@ -86,6 +87,7 @@ module.exports = {
           categoryId: req.body.categoryId,
           amount: req.body.amount,
           date: req.body.date
+          date:req.body.date
         });
         const savedTransaction = await newTransaction.save();
         endpointResponse({
@@ -134,5 +136,5 @@ module.exports = {
       next(httpError);
     }
   }),
-};
 
+};

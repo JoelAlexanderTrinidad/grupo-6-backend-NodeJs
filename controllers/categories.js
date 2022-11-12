@@ -6,7 +6,58 @@ const { catchAsync } = require("../helpers/catchAsync");
 
 // example of a controller. First call the service, then build the controller method
 module.exports = {
-  getCategories: catchAsync(async (req, res, next) => {
+    postCategories: catchAsync(async(req, res, next) => {
+        try {
+            const data = req.body
+            const response = await Category.create({
+                name: data.name,
+                description: data.description,
+                deletedAt: data.deletedAt,
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
+
+            })
+            endpointResponse({
+                res,
+                message: 'Categories retrieved succesfully',
+                body: response
+            })
+        } catch (error) {
+            const httpError = createHttpError(
+                error.statusCode,
+                `[Error retrieving categories] - [index - POST]: ${error.message}`
+            )
+            next(httpError)
+        }
+    }),
+    putCategories: catchAsync(async(req, res, next) => {
+        try {
+            const id = req.params.id
+            const data = req.body
+            const response = await Category.update({
+                name: data.name,
+                deletedAt: data.deletedAt,
+                description: data.description,
+                updatedAt: Date.now()
+            },{
+                where : {
+                    id
+                }
+            })
+            endpointResponse({
+                res,
+                message: 'Categories retrieved succesfully',
+                body: response
+            })
+        } catch (error) {
+            const httpError = createHttpError(
+                error.statusCode,
+                `[Error retrieving categories] - [index - PUT]: ${error.message}`
+            )
+            next(httpError)
+        }
+    }),
+    getCategories: catchAsync(async (req, res, next) => {
     try {
       const response = await Category.findAll();
       endpointResponse({
@@ -52,27 +103,31 @@ module.exports = {
   }),
   getCategoriesById: catchAsync(async (req, res, next) => {
     try {
-      const filter = req.params["id"];
-      const categoryResult = await Category.findOne({
-        where: [{ id: filter }],
-      });
-      console.log(categoryResult);
-      if (categoryResult === null) {
-        throw new ErrorObject("Category ID not exists", 404);
+      const filter =  req.params['id']
+      const categoryResult = await  Category.findOne({
+        where:[{id: filter}],
+      })
+      console.log(categoryResult)
+      if (categoryResult === null){
+        throw new ErrorObject('Category ID not exists', 404)
       }
-      const response = categoryResult;
+      const response = categoryResult
 
       endpointResponse({
         res,
-        message: "Categories retrieved successfully",
+        message: 'Categories retrieved successfully',
         body: response,
-      });
+      })
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving Categories] - [index - GET]: ${error.message}`
-      );
-      next(httpError);
+        `[Error retrieving Categories] - [index - GET]: ${error.message}`,
+      )
+      next(httpError)
     }
+
   }),
-};
+}
+
+// example of a controller. First call the service, then build the controller method
+
