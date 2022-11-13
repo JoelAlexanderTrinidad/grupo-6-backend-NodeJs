@@ -4,7 +4,6 @@ const endpointResponse = ({
   status = true,
   message,
   body,
-  token,
   options,
 }) => {
   res.status(code).json({
@@ -12,11 +11,10 @@ const endpointResponse = ({
     code,
     message,
     body,
-    token,
     options,
-  });
-};
+  })
+}
 
 module.exports = {
   endpointResponse,
-};
+}

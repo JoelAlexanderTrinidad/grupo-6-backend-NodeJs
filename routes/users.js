@@ -1,27 +1,11 @@
-const express = require('express');
-
-//midlewares
-const { protectToken } = require('../middlewares/protectTokenMiddleware');
-
-//controllers
+const express = require('express')
 const {
-  users,
-  userById,
-  post,
-  put,
-  deleteUser,
-} = require('../controllers/users');
+   get,
+} = require('../controllers/users')
 
-const router = express.Router();
+const router = express.Router()
 
-router.post('/', post);
+router.get('/', get)
 
-//Apply protectTokenMiddleware
-router.use(protectToken);
-//routes affeceted for protectToken
-router.get('/', users);
-router.get('/:id', userById);
-router.put('/:id', put);
-router.delete('/:id', deleteUser);
 
-module.exports = router;
+module.exports = router
