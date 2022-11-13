@@ -78,7 +78,7 @@ const router = express.Router();
 *        '400':
 *          description: Invalid ID supplied
 *        '404':
-*          description: categories not found
+*          description: category not found
 *        '500':
 *          description: error of server
 *    security:
@@ -122,7 +122,7 @@ const router = express.Router();
  * @swagger
  *  /categories/{id}:
  *   put:
- *    summary: create a new categories
+ *    summary: update an existing category
  *    tags: [categories]
  *    parameters:
 *       - name: id
@@ -141,7 +141,7 @@ const router = express.Router();
  *        $ref: '#components/schemas/category'
  *    responses:
  *     200:
- *      description: A new categories has been created!
+ *      description: category has been updated!
  */
 /**
  * @swagger
@@ -158,7 +158,7 @@ const router = express.Router();
  *        $ref: '#components/schemas/category'
  *    responses:
  *     200:
- *      description: A new categories has been created!
+ *      description: A new category has been created!
  */
 router.get('/', getCategories)
 router.get('/:id', getCategoriesById)

@@ -130,13 +130,13 @@ const router = express.Router();
  *        $ref: '#components/schemas/users'
  *    responses:
  *     200:
- *      description: A new transaction has been created!
+ *      description: A new user has been created!
  */
 /**
  * @swagger
  *  /users/{id}:
  *   put:
- *    summary: create a new user
+ *    summary: update an existing user
  *    tags: [users]
  *    parameters:
 *       - name: id
@@ -155,7 +155,7 @@ const router = express.Router();
  *        $ref: '#components/schemas/users'
  *    responses:
  *     200:
- *      description: A new transaction has been created!
+ *      description: user has been updated!
  */
 router.get("/", users);
 router.get("/:id", userById);
