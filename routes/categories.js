@@ -7,6 +7,8 @@ const {
   putCategories
 } = require("../controllers/categories");
 
+const { protectToken } = require('../middlewares/protectTokenMiddleware');
+
 const router = express.Router();
 /**
  * /
@@ -160,10 +162,11 @@ const router = express.Router();
  *     200:
  *      description: A new category has been created!
  */
+
+router.use(protectToken) //quitar esto al hacer los tests
 router.get('/', getCategories)
 router.get('/:id', getCategoriesById)
-
-router.delete("/:id", deleteCategory);
+router.delete("/:id", deleteCategory)
 router.post('/', postCategories)
 router.put('/:id', putCategories)
 

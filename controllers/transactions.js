@@ -8,6 +8,11 @@ const { ErrorObject } = require("../helpers/error");
 
 module.exports =  {
     get: catchAsync(async (req, res, next) => {
+
+    const actualUser = {
+      id: res.locals.user.dataValues.id,
+      isAdmin: res.locals.user.dataValues.roleId === 1 ? true : false
+    }
     
     try {
       let page = 1
@@ -16,21 +21,31 @@ module.exports =  {
       let linkNext = null
       const limit = 10
       const baseUrl = "http://localhost:3000/transactions?page=";
-      
-      console.log(req.query)
-      
+            
         if (parseInt(req.query.page) > 1) {
           page = parseInt(req.query.page)
           offset = (page-1)*limit
         } 
         let queryResult = []
         
-    if(!req.query.hasOwnProperty('query')){
-      queryResult = await Transactions.findAndCountAll(
-      {
-          limit:limit,
-          offset:offset
-      })
+    if(!req.query.hasOwnProperty('query')) {
+
+      if (actualUser.isAdmin) {
+        queryResult = await Transactions.findAndCountAll(
+          {
+              limit:limit,
+              offset:offset
+          })
+      } else {
+        queryResult = await Transactions.findAndCountAll(
+          {
+              where: {
+              userId: actualUser.id,
+                },
+              limit:limit,
+              offset:offset
+          })
+      }
      
       const itemsCount = queryResult.count - (page*limit)
         
@@ -42,22 +57,27 @@ module.exports =  {
             }}
 
 
-   if(req.query.hasOwnProperty('query')){
-    if (isNaN(req.query.query)) {
-      throw new ErrorObject("Invalid format, you must enter a number", 404);
-    }
-    
-   const userId = req.query.query
-     queryResult = await Transactions.findAndCountAll(
-        {
-          where: {
-            userId: userId,
-              },
-           limit:limit,
-          offset:offset
-         })
+      if(req.query.hasOwnProperty('query')){
+        if (isNaN(req.query.query)) {
+          throw new ErrorObject("Invalid format, you must enter a number", 404);
+        }
         
-       if (queryResult.count === 0) {
+      const userId = req.query.query
+
+      if (userId == actualUser.id) {
+        queryResult = await Transactions.findAndCountAll(
+          {
+            where: {
+              userId: userId,
+                },
+            limit:limit,
+            offset:offset
+          })
+      } else {
+        throw new ErrorObject("Unauthorized", 403);
+      }
+     
+      if (queryResult.count === 0) {
       throw new ErrorObject("The user does not exist", 404);
       }
         const itemsCount = queryResult.count -(page*limit)
@@ -86,8 +106,21 @@ module.exports =  {
   }),
 
   getTransaction: catchAsync(async (req, res, next) => {
+
+    const actualUser = {
+      id: res.locals.user.dataValues.id,
+      isAdmin: res.locals.user.dataValues.roleId === 1 ? true : false
+    }
+
     try {
-      const response = await Transactions.findByPk(req.params.id);
+
+      let response = [];
+
+      if (req.params.id == actualUser.id || actualUser.isAdmin) {
+        response = await Transactions.findByPk(req.params.id);
+      } else {
+        throw new ErrorObject('Unauthorized', 403)
+      }
 
       if (isNaN(req.params.id)) {
         let error = new ErrorObject("Transaction not found", 400, [
@@ -115,6 +148,7 @@ module.exports =  {
     }
   }),
  post: catchAsync(async (req, res, next) => {
+
     try {
       if (req.body.userId && req.body.categoryId && req.body.amount && req.body.description && req.body.date) {
         const newTransaction = new Transactions({

@@ -4,6 +4,7 @@ const validator = require('../middlewares/validator')
 
 //controllers
 const { users, userById, post, put, deleteUser } = require("../controllers/users");
+const { protectToken } = require('../middlewares/protectTokenMiddleware');
 
 const router = express.Router();
 /**
@@ -157,11 +158,13 @@ const router = express.Router();
  *     200:
  *      description: user has been updated!
  */
-router.get("/", users);
-router.get("/:id", userById);
+
+//quitar el protectToken al hacer los tests
+router.get("/", protectToken, users);
+router.get("/:id", protectToken, userById);
 router.post('/', validator(postValidationSchema), post)
-router.put('/:id', put)
-router.delete('/:id', deleteUser)
+router.put('/:id', protectToken, put)
+router.delete('/:id', protectToken, deleteUser)
 
 module.exports = router
 
