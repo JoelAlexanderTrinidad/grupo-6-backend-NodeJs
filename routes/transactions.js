@@ -10,6 +10,8 @@ const {
   deleteTransaction,
 } = require("../controllers/transactions");
 
+const { protectToken } = require('../middlewares/protectTokenMiddleware');
+
 /**
  * @swagger
  * components:
@@ -145,6 +147,7 @@ const {
  *      description: A new transaction has been created!
  */
 
+router.use(protectToken); //quitar esto al hacer los tests
 router.get("/?", get);
 router.get("/:id", getTransaction);
 router.post("/", post);
