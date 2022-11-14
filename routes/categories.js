@@ -1,9 +1,12 @@
 const express = require("express");
-const { postValidationSchema } = require('../schemas/usersValidation')
-const validator = require('../middlewares/validator')
+const {
+  getCategories,
+  deleteCategory,
+  getCategoriesById,
+  postCategories,
+  putCategories
+} = require("../controllers/categories");
 
-//controllers
-const { users, userById, post, put, deleteUser } = require("../controllers/users");
 const { protectToken } = require('../middlewares/protectTokenMiddleware');
 
 const router = express.Router();
@@ -12,7 +15,7 @@ const router = express.Router();
  * @swagger
  * components:
  *  schemas:
- *    users:
+ *    category:
  *      type: object
  *      requires:
  *        -name
@@ -20,45 +23,46 @@ const router = express.Router();
  *      properties:
  *        description:
  *          type: string
- *          description: This is the description of the user
+ *          description: This is the description of the category
  *        name:
  *          type: string
- *          description: user
+ *          description: This is the name of the category
  *        deletedAt:
  *          type: date
- *          description: This is the date of delete of the user
+ *          description: This is the date of delete of the transaction
  * 
  */
 /**
  /
 * @swagger
-* /users:
+* /categories:
 *  get:
-*    summary: returns the list of all  users 
-*    tags: [users]
+*    summary: returns the list of all categories
+*    tags: [categories]
 *    responses:
 *      200:
-*         description: the list of all users
+*         description: the list of categories
 *         content:
 *            application/json:
 *              schema:
 *                type: array
 *                items:
-*                  $ref: '#/components/schemas/users'
+*                  $ref: '#/components/schemas/category'
 *    security:
 *     - ApiKeyAuth: []
+
 */
 /**
  /
 * @swagger
-* /users/{id}:
+* /categories/{id}:
 *  get:
-*    summary: Find users by ID
-*    tags: [users]
+*    summary: Find transaction by ID
+*    tags: [categories]
 *    parameters:
 *       - name: id
 *         in: path
-*         description: ID of users to return
+*         description: ID of categories to return
 *         required: true
 *         schema:
 *           type: integer
@@ -69,14 +73,14 @@ const router = express.Router();
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/users'
+*                $ref: '#/components/schemas/category'
 *            application/xml:
 *              schema:
-*                $ref: '#/components/schemas/users'
+*                $ref: '#/components/schemas/category'
 *        '400':
 *          description: Invalid ID supplied
 *        '404':
-*          description: users not found
+*          description: category not found
 *        '500':
 *          description: error of server
 *    security:
@@ -85,14 +89,14 @@ const router = express.Router();
 /**
  /
 * @swagger
-* /users/{id}:
+* /categories/{id}:
 *  delete:
-*    summary: Find users by ID
-*    tags: [users]
+*    summary: Find categories by ID
+*    tags: [categories]
 *    parameters:
 *       - name: id
 *         in: path
-*         description: ID of users to return
+*         description: ID of categories to return
 *         required: true
 *         schema:
 *           type: integer
@@ -103,14 +107,14 @@ const router = express.Router();
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/users'
+*                $ref: '#/components/schemas/category'
 *            application/xml:
 *              schema:
-*                $ref: '#/components/schemas/users'
+*                $ref: '#/components/schemas/category'
 *        '400':
 *          description: Invalid ID supplied
 *        '404':
-*          description: users not found
+*          description: categories not found
 *        '500':
 *          description: error of server
 *    security:
@@ -118,31 +122,14 @@ const router = express.Router();
 */
 /**
  * @swagger
- *  /users:
- *   post:
- *    summary: create a new user
- *    tags: [users]
- *    requestBody:
- *     required: true
- *     content:
- *      application/json:
- *       schema:
- *        type: object
- *        $ref: '#components/schemas/users'
- *    responses:
- *     200:
- *      description: A new user has been created!
- */
-/**
- * @swagger
- *  /users/{id}:
+ *  /categories/{id}:
  *   put:
- *    summary: update an existing user
- *    tags: [users]
+ *    summary: update an existing category
+ *    tags: [categories]
  *    parameters:
 *       - name: id
 *         in: path
-*         description: ID of users to return
+*         description: ID of categories to return
 *         required: true
 *         schema:
 *           type: integer
@@ -153,19 +140,37 @@ const router = express.Router();
  *      application/json:
  *       schema:
  *        type: object
- *        $ref: '#components/schemas/users'
+ *        $ref: '#components/schemas/category'
  *    responses:
  *     200:
- *      description: user has been updated!
+ *      description: category has been updated!
+ */
+/**
+ * @swagger
+ *  /categories:
+ *   post:
+ *    summary: create a new categories
+ *    tags: [categories]
+ *    requestBody:
+ *     required: true
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        $ref: '#components/schemas/category'
+ *    responses:
+ *     200:
+ *      description: A new category has been created!
  */
 
-//quitar el protectToken al hacer los tests
-router.get("/", protectToken, users);
-router.get("/:id", protectToken, userById);
-router.post('/', validator(postValidationSchema), post)
-router.put('/:id', protectToken, put)
-router.delete('/:id', protectToken, deleteUser)
+router.use(protectToken) //quitar esto al hacer los tests
+router.get('/', getCategories)
+router.get('/:id', getCategoriesById)
+router.delete("/:id", deleteCategory)
+router.post('/', postCategories)
+router.put('/:id', putCategories)
 
-module.exports = router
 
+
+module.exports = router;
 
