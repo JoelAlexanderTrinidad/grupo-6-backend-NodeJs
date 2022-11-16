@@ -21,7 +21,7 @@ npx sequelize model:generate --name Ejemplo --attributes ejemplo:string
 ### Crear la base de datos
 
 ```
-https://meet.google.com/fdm-kpoj-xwg
+npx sequelize db:create
 ```
 
 ### Migrar modelos creados previamente
